@@ -25,7 +25,7 @@ jobs:
     # 3. Deploy static files to S3
     - name: Sync web files to S3
       run: |
-        aws s3 sync serverless-app/ s3://serverless-bucket-2025/ --delete
+        aws s3 sync SERVERLESS-APP/ s3://serverless-bucket-2025/ --delete
 
     # 4. Zip Lambda code
     - name: Zip Lambda
