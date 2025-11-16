@@ -27,4 +27,4 @@ jobs:
         run: |
           cd lambda
           zip -r ../lambda.zip .
-          aws lambda update-function-code --function-name ContactFormLambda --zip-file fileb://../lambda.zip
+          aws lambda update-function-code --function-name contactFormHandler --zip-file fileb://../lambda.zip
