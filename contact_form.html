@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Form</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="form-body">
+  <div class="form-container">
+    <h1>Contact Form</h1>
+
+    <!-- Ändring: Inget action-attribut -->
+    <form id="contactForm">
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+
+    <p><a href="index.html">← Back to Home</a></p>
+  </div>
+
+  <!-- 🟢 Lägg till detta script -->
+  <script>
+    document.getElementById("contactForm").addEventListener("submit", async (e) => {
+      e.preventDefault();  // Stoppa vanlig POST till S3 (fixar 405-felet)
+
+      const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        message: document.getElementById("message").value
+      };
+
+      // 🟢 BYT UT DEN HÄR URL:en:
+      const apiUrl = "https://o1e7hfl343.execute-api.eu-west-1.amazonaws.com/contact"; 
+      // Exempel: "https://o1e7hfl343.execute-api.eu-west-1.amazonaws.com/contact"
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      // Skicka data vidare till tack-sidan
+      const params = new URLSearchParams(result).toString();
+      window.location.href = "thankyou.html?" + params;
+    });
+  </script>
+
+</body>
+</html>

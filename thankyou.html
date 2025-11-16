@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="form-body">
+  <div class="form-container">
+    <h1 class="success-title">✅ Thank You!</h1>
+    <div class="success">
+      Your message has been received successfully!
+    </div>
+
+    <div class="form-data">
+      <h3>Your submission:</h3>
+      <p><strong>Name:</strong> <span id="name"></span></p>
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>Message:</strong><br><span id="message"></span></p>
+    </div>
+
+    <p>
+      <a href="index.html">← Back to Home</a> |
+      <a href="contact_form.html">Send Another Message</a>
+    </p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    document.getElementById("name").textContent = params.get("name");
+    document.getElementById("email").textContent = params.get("email");
+    document.getElementById("message").textContent = params.get("message");
+  </script>
+
+</body>
+</html>
