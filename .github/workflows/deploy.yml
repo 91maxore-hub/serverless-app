@@ -3,28 +3,40 @@ name: Deploy Serverless App
 on:
   push:
     branches:
-      - main  # kör pipeline på main-branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    # 1. Checkout koden
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+    # 2. Configure AWS credentials
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-1
 
-      - name: Sync frontend to S3
-        run: |
-          aws s3 sync ./ s3://serverless-bucket-2025/ --exclude "lambda/*" --delete
+    # 3. Deploy static files to S3
+    - name: Sync web files to S3
+      run: |
+        aws s3 sync web/ s3://serverless-bucket-2025/ --delete
 
-      - name: Deploy Lambda
-        run: |
-          cd lambda
-          zip -r ../lambda.zip .
-          aws lambda update-function-code --function-name contactFormHandler --zip-file fileb://../lambda.zip
+    # 4. Zip Lambda code
+    - name: Zip Lambda
+      run: |
+        cd lambda
+        zip -r ../lambda.zip *
+        cd ..
+
+    # 5. Update Lambda function
+    - name: Deploy Lambda
+      run: |
+        aws lambda update-function-code \
+          --function-name contactFormHandler \
+          --zip-file fileb://lambda.zip
