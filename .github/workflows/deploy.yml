@@ -22,7 +22,7 @@ jobs:
 
       - name: Deploy frontend to S3
         run: |
-          aws s3 sync frontend/ s3://serverless-bucket-2025 --delete
+          aws s3 sync ./ s3://serverless-bucket-2025 --delete
           aws cloudfront create-invalidation --distribution-id E30HD08GZO95R9 --paths "/*"
 
       - name: Deploy Lambda function
