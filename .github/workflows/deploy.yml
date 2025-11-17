@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -21,12 +22,12 @@ jobs:
 
       - name: Deploy frontend to S3
         run: |
-          # Frontend ligger i rootmappen
-          aws s3 sync ./ s3://serverless-bucket-2025 --delete
+          # Synka frontendfiler (rootmappen) till S3, exkludera lambda och .github
+          aws s3 sync ./ s3://serverless-bucket-2025 --delete --exclude "lambda/*" --exclude ".github/*"
 
       - name: Package and Deploy Lambda function
         run: |
-          # Gå in i lambda/ mappen och zip:a innehållet (inte mappen själv)
+          # Gå in i lambda-mappen och zip:a innehållet
           cd lambda
           zip -r ../lambda.zip .
           cd ..
